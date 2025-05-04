@@ -8,13 +8,15 @@ class TestQuestions:
 
     @classmethod
     def setup_class(cls):
-        cls.driver = webdriver.Firefox()
-        cls.main_page = MainPage(cls.driver)
-        cls.main_page.open()
+        with allure.step('Открываем браузер Firefox'):
+            cls.driver = webdriver.Firefox()
+            cls.main_page = MainPage(cls.driver)
+            cls.main_page.open()
 
     @classmethod
     def teardown_class(cls):
-        cls.driver.quit()
+        with allure.step('Открываем браузер Firefox'):
+            cls.driver.quit()
 
     @pytest.mark.parametrize("question_number, expected_text", [
         (0, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."),
@@ -28,7 +30,7 @@ class TestQuestions:
         (6, "Да, пока самокат не привезли. Штрафа не будет, объяснительной записки тоже не попросим. Все же свои."),
         (7, "Да, обязательно. Всем самокатов! И Москве, и Московской области.")
     ])
-    @allure.title("Проверка вопроса {question_number}")
+    @allure.title('Проверка вопроса {question_number}')
     def test_question(self, question_number, expected_text):
         self.main_page.click_question(question_number)
         answer_text = self.main_page.get_answer_text(question_number)
