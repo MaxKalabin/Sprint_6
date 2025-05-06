@@ -1,22 +1,8 @@
 import pytest
 import allure
-from selenium import webdriver
-from page_objects.main_page import MainPage
 
 @allure.feature("Тесты: Вопросы о важном")
 class TestQuestions:
-
-    @classmethod
-    def setup_class(cls):
-        with allure.step('Открываем браузер Firefox'):
-            cls.driver = webdriver.Firefox()
-            cls.main_page = MainPage(cls.driver)
-            cls.main_page.open()
-
-    @classmethod
-    def teardown_class(cls):
-        with allure.step('Открываем браузер Firefox'):
-            cls.driver.quit()
 
     @pytest.mark.parametrize("question_number, expected_text", [
         (0, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."),
@@ -31,7 +17,8 @@ class TestQuestions:
         (7, "Да, обязательно. Всем самокатов! И Москве, и Московской области.")
     ])
     @allure.title('Проверка вопроса {question_number}')
-    def test_question(self, question_number, expected_text):
-        self.main_page.click_question(question_number)
-        answer_text = self.main_page.get_answer_text(question_number)
+    def test_question(self, main_page, question_number, expected_text):
+        main_page.open()
+        main_page.click_question(question_number)
+        answer_text = main_page.get_answer_text(question_number)
         assert answer_text == expected_text
